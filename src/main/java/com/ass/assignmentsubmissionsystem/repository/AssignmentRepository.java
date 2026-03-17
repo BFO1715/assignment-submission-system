@@ -2,7 +2,10 @@ package com.ass.assignmentsubmissionsystem.repository;
 
 import com.ass.assignmentsubmissionsystem.model.Assignment;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AssignmentRepository {
@@ -12,6 +15,21 @@ public class AssignmentRepository {
     public AssignmentRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    private final RowMapper<Assignment> assignmentRowMapper = (rs, rowNum) -> {
+        Assignment a = new Assignment();
+        a.setAssignmentId(rs.getString("assignmentId"));
+        a.setStudentId(rs.getString("studentId"));
+        a.setAdminId(rs.getString("adminId"));
+        a.setTitle(rs.getString("title"));
+        a.setCourseId(rs.getString("courseId"));
+        a.setDeadline(rs.getString("deadline"));
+        a.setMaxFileSizeMB(rs.getInt("maxFileSizeMB"));
+        a.setPermittedFileTypes(rs.getString("permittedFileTypes"));
+        a.setAdditionalInfo(rs.getString("additionalInfo"));
+        a.setStatus(rs.getString("status"));
+        return a;
+    };
 
     public int save(Assignment assignment) {
         String sql = "INSERT INTO assignment (assignmentId, studentId, adminId, title, courseId, " +
@@ -29,5 +47,16 @@ public class AssignmentRepository {
                 assignment.getAdditionalInfo(),
                 assignment.getStatus()
         );
+    }
+
+    public List<Assignment> findAll() {
+        String sql = "SELECT * FROM assignment ORDER BY createdAt DESC";
+        return jdbcTemplate.query(sql, assignmentRowMapper);
+    }
+
+    public Optional<Assignment> findById(String assignmentId) {
+        String sql = "SELECT * FROM assignment WHERE assignmentId = ?";
+        List<Assignment> results = jdbcTemplate.query(sql, assignmentRowMapper, assignmentId);
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 }

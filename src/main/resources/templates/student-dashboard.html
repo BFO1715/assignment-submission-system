@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Student Dashboard — ASS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<nav>
+    <span class="brand">Assignment Submission System</span>
+    <div class="nav-links">
+        <span style="color:rgba(255,255,255,0.7);font-size:13px"
+              th:text="${student != null ? student.fullName : ''}"></span>
+        <form th:action="@{/logout}" method="post" style="margin:0">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="btn-logout">Sign out</button>
+        </form>
+    </div>
+</nav>
+
+<div class="page">
+
+    <div th:if="${notifications != null and !#lists.isEmpty(notifications)}"
+         class="alert alert-warning" role="alert" style="margin-bottom:1.5rem">
+        You have
+        <strong th:text="${#lists.size(notifications)}"></strong>
+        unread notification(s).
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-label">Total submissions</div>
+            <div class="stat-value"
+                 th:text="${submissions != null ? #lists.size(submissions) : 0}">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Available assignments</div>
+            <div class="stat-value"
+                 th:text="${assignments != null ? #lists.size(assignments) : 0}">0</div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom:1.5rem">
+        <div class="card-header">
+            <h1>Available assignments</h1>
+            <p>Select an assignment to submit your work</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Deadline</th>
+                        <th scope="col">Max size</th>
+                        <th scope="col">File types</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="assignment : ${assignments}">
+                        <td th:text="${assignment.title}"></td>
+                        <td th:text="${assignment.courseId}"></td>
+                        <td th:text="${assignment.deadline}"></td>
+                        <td th:text="${assignment.maxFileSizeMB + ' MB'}"></td>
+                        <td th:text="${assignment.permittedFileTypes}"></td>
+                        <td>
+                            <a th:href="@{/student/submit/{id}(id=${assignment.assignmentId})}"
+                               class="btn btn-primary btn-sm">Submit</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${assignments == null or #lists.isEmpty(assignments)}">
+                        <td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">
+                            No assignments available yet.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h1>My submissions</h1>
+            <p>Your submitted assignments and their status</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Case reference</th>
+                        <th scope="col">Assignment</th>
+                        <th scope="col">File name</th>
+                        <th scope="col">File type</th>
+                        <th scope="col">Size (MB)</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Submitted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="sub : ${submissions}">
+                        <td th:text="${sub.caseReference}"></td>
+                        <td th:text="${sub.assignmentId}"></td>
+                        <td th:text="${sub.fileName}"></td>
+                        <td th:text="${sub.fileType}"></td>
+                        <td th:text="${sub.fileSizeMB}"></td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${sub.status == 'SUBMITTED'} ? 'badge-submitted' :
+                                                  (${sub.status == 'REVIEWED'} ? 'badge-reviewed' :
+                                                  (${sub.status == 'LATE'} ? 'badge-late' : 'badge-deleted'))"
+                                  th:text="${sub.status}"></span>
+                        </td>
+                        <td th:text="${sub.submittedAt}"></td>
+                    </tr>
+                    <tr th:if="${submissions == null or #lists.isEmpty(submissions)}">
+                        <td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">
+                            No submissions yet.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
