@@ -53,10 +53,18 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                    new AntPathRequestMatcher("/"),
                     new AntPathRequestMatcher("/register"),
-                    new AntPathRequestMatcher("/login")
+                    new AntPathRequestMatcher("/login"),
+                    new AntPathRequestMatcher("/admin-register"),
+                    new AntPathRequestMatcher("/error")
                 ).permitAll()
-                .requestMatchers("/admin/**", "/create-assignment").hasRole("ADMIN")
+                .requestMatchers(
+                    new AntPathRequestMatcher("/admin/dashboard"),
+                    new AntPathRequestMatcher("/admin/edit/**"),
+                    new AntPathRequestMatcher("/admin/delete/**"),
+                    new AntPathRequestMatcher("/create-assignment")
+                ).hasRole("ADMIN")
                 .requestMatchers("/student/**").hasRole("STUDENT")
                 .anyRequest().authenticated()
             )

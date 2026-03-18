@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Assignment Submission System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="auth-wrap">
+    <div style="width:100%;max-width:560px">
+
+        <div style="text-align:center;margin-bottom:2rem">
+            <div style="display:inline-flex;align-items:center;gap:12px;margin-bottom:0.75rem">
+                <div class="auth-logo-icon">
+                    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" y="7" width="14" height="8" rx="2" stroke="white" stroke-width="1.2"/>
+                        <path d="M4 7V5a4 4 0 018 0v2" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span style="font-size:20px;font-weight:500;color:var(--text-primary)">
+                    Assignment Submission System
+                </span>
+            </div>
+            <p style="font-size:14px;color:var(--text-muted)">
+                Select your role to continue
+            </p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+
+            <!-- Student card -->
+            <div class="card" style="text-align:center;padding:2rem 1.5rem">
+                <div style="width:48px;height:48px;background:var(--primary-light);border-radius:12px;
+                            display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="8" r="4" stroke="#0C447C" stroke-width="1.5"/>
+                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0C447C" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h2 style="font-size:16px;font-weight:500;color:var(--text-primary);margin-bottom:0.5rem">
+                    Student
+                </h2>
+                <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.5rem">
+                    Submit assignments and view your submissions
+                </p>
+                <a th:href="@{/login}" class="btn btn-primary btn-full" style="margin-bottom:0.75rem">
+                    Sign in
+                </a>
+                <a th:href="@{/register}" class="btn btn-secondary btn-full">
+                    Create account
+                </a>
+            </div>
+
+            <!-- Administrator card -->
+            <div class="card" style="text-align:center;padding:2rem 1.5rem">
+                <div style="width:48px;height:48px;background:#E1F5EE;border-radius:12px;
+                            display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="8" r="4" stroke="#0F6E56" stroke-width="1.5"/>
+                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="19" cy="19" r="3" fill="#0F6E56"/>
+                        <path d="M18 19h2M19 18v2" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h2 style="font-size:16px;font-weight:500;color:var(--text-primary);margin-bottom:0.5rem">
+                    Administrator
+                </h2>
+                <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.5rem">
+                    Manage assignments and student submissions
+                </p>
+                <a th:href="@{/login}" class="btn btn-primary btn-full" style="margin-bottom:0.75rem;
+                   background:var(--success)">
+                    Sign in
+                </a>
+                <a th:href="@{/admin-register}" class="btn btn-secondary btn-full">
+                    Create account
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

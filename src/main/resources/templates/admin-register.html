@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Registration — ASS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="auth-wrap">
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <div class="auth-logo-icon">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="7" width="14" height="8" rx="2" stroke="white" stroke-width="1.2"/>
+                    <path d="M4 7V5a4 4 0 018 0v2" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <span class="auth-logo-text">Assignment Submission System</span>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert"
+             th:text="${errorMessage}"></div>
+
+        <form th:action="@{/admin-register}" th:object="${administrator}" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First name <span class="req" aria-hidden="true">*</span></label>
+                    <input type="text" id="firstName" th:field="*{firstName}"
+                           autocomplete="given-name"
+                           placeholder="e.g. Jane"
+                           aria-required="true"/>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last name <span class="req" aria-hidden="true">*</span></label>
+                    <input type="text" id="lastName" th:field="*{lastName}"
+                           autocomplete="family-name"
+                           placeholder="e.g. Smith"
+                           aria-required="true"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">University email <span class="req" aria-hidden="true">*</span></label>
+                <input type="email" id="email" th:field="*{email}"
+                       autocomplete="email"
+                       placeholder="admin@university.ac.uk"
+                       aria-required="true"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password <span class="req" aria-hidden="true">*</span></label>
+                <input type="password" id="password" th:field="*{password}"
+                       autocomplete="new-password"
+                       placeholder="Min. 8 characters"
+                       aria-required="true"
+                       aria-describedby="pw-hint"/>
+                <span id="pw-hint" class="form-hint">Min. 8 characters including a capital, number and symbol</span>
+            </div>
+            <p class="req-note"><span aria-hidden="true">*</span> Required fields</p>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="btn btn-primary btn-full" 
+                    style="background:var(--success)">Create admin account</button>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a th:href="@{/login}">Sign in</a>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

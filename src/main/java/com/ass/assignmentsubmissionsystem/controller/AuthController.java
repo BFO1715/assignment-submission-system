@@ -1,7 +1,11 @@
 package com.ass.assignmentsubmissionsystem.controller;
 
 import com.ass.assignmentsubmissionsystem.model.Student;
+import com.ass.assignmentsubmissionsystem.model.Administrator;
 import com.ass.assignmentsubmissionsystem.repository.StudentRepository;
+import com.ass.assignmentsubmissionsystem.repository.AdminRepository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +17,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AuthController {
 
     private final StudentRepository studentRepository;
+    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthController(StudentRepository studentRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(StudentRepository studentRepository,
+                          AdminRepository adminRepository,
+                          PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
+        this.adminRepository   = adminRepository;
         this.passwordEncoder   = passwordEncoder;
+    }
+
+    @GetMapping("/")
+    public String home() {
+        return "home";
     }
 
     @GetMapping("/login")
@@ -44,8 +57,26 @@ public class AuthController {
         return "redirect:/login?registered";
     }
 
+    @GetMapping("/admin-register")
+    public String showAdminRegister(Model model) {
+        model.addAttribute("administrator", new Administrator());
+        return "admin-register";
+    }
+
+    @PostMapping("/admin-register")
+    public String processAdminRegister(@ModelAttribute Administrator administrator, Model model) {
+        administrator.setAdminId("ADM-" + System.currentTimeMillis());
+        administrator.setPassword(passwordEncoder.encode(administrator.getPassword()));
+        adminRepository.save(administrator);
+        return "redirect:/login?registered";
+    }
+
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            return "redirect:/admin/dashboard";
+        }
         return "redirect:/student/dashboard";
     }
 }
