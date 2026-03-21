@@ -52,6 +52,8 @@ public class StudentController {
     public String showSubmitForm(@PathVariable String assignmentId, Model model) {
         model.addAttribute("submission", new Submission());
         model.addAttribute("assignmentId", assignmentId);
+        assignmentRepository.findById(assignmentId)
+                .ifPresent(a -> model.addAttribute("assignment", a));
         return "submit-assignment";
     }
 

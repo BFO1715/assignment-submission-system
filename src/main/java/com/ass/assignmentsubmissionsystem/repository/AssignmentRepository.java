@@ -59,4 +59,25 @@ public class AssignmentRepository {
         List<Assignment> results = jdbcTemplate.query(sql, assignmentRowMapper, assignmentId);
         return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
+
+    public int update(Assignment assignment) {
+        String sql = "UPDATE assignment SET title = ?, courseId = ?, deadline = ?, " +
+                     "maxFileSizeMB = ?, permittedFileTypes = ?, additionalInfo = ?, " +
+                     "status = ? WHERE assignmentId = ?";
+        return jdbcTemplate.update(sql,
+                assignment.getTitle(),
+                assignment.getCourseId(),
+                assignment.getDeadline(),
+                assignment.getMaxFileSizeMB(),
+                assignment.getPermittedFileTypes(),
+                assignment.getAdditionalInfo(),
+                assignment.getStatus(),
+                assignment.getAssignmentId()
+        );
+    }
+
+    public int delete(String assignmentId) {
+        String sql = "DELETE FROM assignment WHERE assignmentId = ?";
+        return jdbcTemplate.update(sql, assignmentId);
+    }
 }
