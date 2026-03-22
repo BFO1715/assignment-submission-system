@@ -43,8 +43,8 @@ public class StudentController {
             model.addAttribute("student", s);
             model.addAttribute("submissions", submissionRepository.findByStudentId(s.getStudentId()));
             model.addAttribute("notifications", notificationRepository.findByRecipientId(s.getStudentId()));
+            model.addAttribute("assignments", assignmentRepository.findByCourseId(s.getCourseId()));
         });
-        model.addAttribute("assignments", assignmentRepository.findAll());
         return "student-dashboard";
     }
 

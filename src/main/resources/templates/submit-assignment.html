@@ -52,10 +52,17 @@
                     <label for="fileType">File type <span class="req" aria-hidden="true">*</span></label>
                     <select id="fileType" th:field="*{fileType}" aria-required="true">
                         <option value="" disabled selected>Select…</option>
-                        <option value="pdf">PDF</option>
-                        <option value="docx">DOCX</option>
-                        <option value="zip">ZIP</option>
-                        <option value="txt">TXT</option>
+                        <th:block th:if="${assignment != null}"
+                                  th:each="type : ${#strings.arraySplit(assignment.permittedFileTypes, ',')}">
+                            <option th:value="${#strings.trim(type)}"
+                                    th:text="${#strings.toUpperCase(#strings.trim(type))}"></option>
+                        </th:block>
+                        <th:block th:if="${assignment == null}">
+                            <option value="pdf">PDF</option>
+                            <option value="docx">DOCX</option>
+                            <option value="zip">ZIP</option>
+                            <option value="txt">TXT</option>
+                        </th:block>
                     </select>
                 </div>
                 <div class="form-group">

@@ -54,6 +54,11 @@ public class AssignmentRepository {
         return jdbcTemplate.query(sql, assignmentRowMapper);
     }
 
+    public List<Assignment> findByCourseId(String courseId) {
+        String sql = "SELECT * FROM assignment WHERE courseId = ? ORDER BY createdAt DESC";
+        return jdbcTemplate.query(sql, assignmentRowMapper, courseId);
+    }
+
     public Optional<Assignment> findById(String assignmentId) {
         String sql = "SELECT * FROM assignment WHERE assignmentId = ?";
         List<Assignment> results = jdbcTemplate.query(sql, assignmentRowMapper, assignmentId);
