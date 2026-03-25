@@ -65,6 +65,7 @@ public class SecurityConfig {
                     new AntPathRequestMatcher("/admin/delete/**"),
                     new AntPathRequestMatcher("/admin/edit-assignment/**"),
                     new AntPathRequestMatcher("/admin/delete-assignment/**"),
+                    new AntPathRequestMatcher("/admin/reset-password/**"),
                     new AntPathRequestMatcher("/create-assignment")
                 ).hasRole("ADMIN")
                 .requestMatchers("/student/**").hasRole("STUDENT")

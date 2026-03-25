@@ -54,9 +54,11 @@ public class AssignmentRepository {
         return jdbcTemplate.query(sql, assignmentRowMapper);
     }
 
-    public List<Assignment> findByCourseId(String courseId) {
-        String sql = "SELECT * FROM assignment WHERE courseId = ? ORDER BY createdAt DESC";
-        return jdbcTemplate.query(sql, assignmentRowMapper, courseId);
+    public List<Assignment> findByCourseIdAndStudentId(String courseId, String studentId) {
+        String sql = "SELECT * FROM assignment WHERE courseId = ? " +
+                     "AND (studentId IS NULL OR studentId = ?) " +
+                     "ORDER BY createdAt DESC";
+        return jdbcTemplate.query(sql, assignmentRowMapper, courseId, studentId);
     }
 
     public Optional<Assignment> findById(String assignmentId) {

@@ -21,6 +21,11 @@
 
 <div class="page">
 
+    <div th:if="${param.passwordReset}" class="alert alert-success" role="alert"
+         style="margin-bottom:1.5rem">
+        Student password has been reset successfully.
+    </div>
+
     <div class="stats">
         <div class="stat-card">
             <div class="stat-label">Total submissions</div>
@@ -31,6 +36,49 @@
             <div class="stat-label">Total assignments</div>
             <div class="stat-value"
                  th:text="${assignments != null ? #lists.size(assignments) : 0}">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total students</div>
+            <div class="stat-value"
+                 th:text="${students != null ? #lists.size(students) : 0}">0</div>
+        </div>
+    </div>
+
+    <!-- Students table -->
+    <div class="card" style="margin-bottom:1.5rem">
+        <div class="card-header">
+            <h1>Students</h1>
+            <p>View and manage all registered students</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Student ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Course ID</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="student : ${students}">
+                        <td th:text="${student.studentId}"></td>
+                        <td th:text="${student.fullName}"></td>
+                        <td th:text="${student.email}"></td>
+                        <td th:text="${student.courseId}"></td>
+                        <td>
+                            <a th:href="@{/admin/reset-password/{id}(id=${student.studentId})}"
+                               class="btn btn-secondary btn-sm">Reset password</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${students == null or #lists.isEmpty(students)}">
+                        <td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem">
+                            No students registered yet.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -63,10 +111,7 @@
                         <td th:text="${assignment.maxFileSizeMB + ' MB'}"></td>
                         <td th:text="${assignment.permittedFileTypes}"></td>
                         <td>
-                            <span class="badge"
-                                  th:classappend="${assignment.status == 'SUBMITTED'} ? 'badge-submitted' :
-                                                  (${assignment.status == 'REVIEWED'} ? 'badge-reviewed' :
-                                                  'badge-deleted')"
+                            <span class="badge badge-submitted"
                                   th:text="${assignment.status}"></span>
                         </td>
                         <td>
@@ -127,9 +172,8 @@
                         <td>
                             <span class="badge"
                                   th:classappend="${sub.status == 'SUBMITTED'} ? 'badge-submitted' :
-                                                  (${sub.status == 'REVIEWED'} ? 'badge-reviewed' :
-                                                  (${sub.status == 'LATE'} ? 'badge-late' : 'badge-deleted'))"
-                                  th:text="${sub.status}"></span>
+                                                  (${sub.status == 'LATE'} ? 'badge-late' : 'badge-submitted')"
+                                  th:text="${sub.status == 'LATE' ? 'Late Submission' : 'Submitted'}"></span>
                         </td>
                         <td th:text="${sub.submittedAt}"></td>
                         <td>

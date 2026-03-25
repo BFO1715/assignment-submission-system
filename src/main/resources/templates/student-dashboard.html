@@ -110,9 +110,8 @@
                         <td>
                             <span class="badge"
                                   th:classappend="${sub.status == 'SUBMITTED'} ? 'badge-submitted' :
-                                                  (${sub.status == 'REVIEWED'} ? 'badge-reviewed' :
-                                                  (${sub.status == 'LATE'} ? 'badge-late' : 'badge-deleted'))"
-                                  th:text="${sub.status}"></span>
+                                                  (${sub.status == 'LATE'} ? 'badge-late' : 'badge-submitted')"
+                                  th:text="${sub.status == 'LATE' ? 'Late Submission' : 'Submitted'}"></span>
                         </td>
                         <td th:text="${sub.submittedAt}"></td>
                     </tr>

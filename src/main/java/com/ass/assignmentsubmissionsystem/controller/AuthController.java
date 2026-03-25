@@ -2,6 +2,7 @@ package com.ass.assignmentsubmissionsystem.controller;
 
 import com.ass.assignmentsubmissionsystem.model.Student;
 import com.ass.assignmentsubmissionsystem.model.Administrator;
+import com.ass.assignmentsubmissionsystem.model.User;
 import com.ass.assignmentsubmissionsystem.repository.StudentRepository;
 import com.ass.assignmentsubmissionsystem.repository.AdminRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -51,8 +52,15 @@ public class AuthController {
             model.addAttribute("student", student);
             return "register";
         }
+        String password = student.getPassword();
+        if (!new User().checkPassword(password)) {
+            model.addAttribute("errorMessage",
+                "Password must be 6-10 characters and the first 3 characters must be letters.");
+            model.addAttribute("student", student);
+            return "register";
+        }
         student.setStudentId("STU-" + System.currentTimeMillis());
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
+        student.setPassword(passwordEncoder.encode(password));
         studentRepository.save(student);
         return "redirect:/login?registered";
     }
@@ -65,8 +73,15 @@ public class AuthController {
 
     @PostMapping("/admin-register")
     public String processAdminRegister(@ModelAttribute Administrator administrator, Model model) {
+        String password = administrator.getPassword();
+        if (!new User().checkPassword(password)) {
+            model.addAttribute("errorMessage",
+                "Password must be 6-10 characters and the first 3 characters must be letters.");
+            model.addAttribute("administrator", administrator);
+            return "admin-register";
+        }
         administrator.setAdminId("ADM-" + System.currentTimeMillis());
-        administrator.setPassword(passwordEncoder.encode(administrator.getPassword()));
+        administrator.setPassword(passwordEncoder.encode(password));
         adminRepository.save(administrator);
         return "redirect:/login?registered";
     }

@@ -29,7 +29,7 @@
         <form th:action="@{/admin/edit-assignment}" th:object="${assignment}" method="post">
             <input type="hidden" th:field="*{assignmentId}"/>
             <input type="hidden" th:field="*{adminId}"/>
-            <input type="hidden" th:field="*{studentId}"/>
+            <input type="hidden" th:field="*{status}"/>
 
             <div class="form-row">
                 <div class="form-group">
@@ -37,9 +37,22 @@
                     <input type="text" id="title" th:field="*{title}" aria-required="true"/>
                 </div>
                 <div class="form-group">
-                    <label for="courseId">Course ID <span class="req" aria-hidden="true">*</span></label>
-                    <input type="text" id="courseId" th:field="*{courseId}" aria-required="true"/>
+                    <label for="courseId">Course ID(s) <span class="req" aria-hidden="true">*</span></label>
+                    <input type="text" id="courseId" th:field="*{courseId}"
+                           aria-required="true"
+                           aria-describedby="courseId-hint"/>
+                    <span id="courseId-hint" class="form-hint">Comma separated if multiple</span>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label for="studentId">Student ID</label>
+                <input type="text" id="studentId" th:field="*{studentId}"
+                       placeholder="Leave blank for all students on this course"
+                       aria-describedby="studentId-hint"/>
+                <span id="studentId-hint" class="form-hint">
+                    Optional — only set this for individual student assignments or special circumstances
+                </span>
             </div>
 
             <div class="form-row">
@@ -60,21 +73,12 @@
                 <input type="text" id="permittedFileTypes" th:field="*{permittedFileTypes}"
                        aria-required="true"
                        aria-describedby="fileTypes-hint"/>
-                <span id="fileTypes-hint" class="form-hint">Comma separated e.g. pdf, docx, zip</span>
+                <span id="fileTypes-hint" class="form-hint">Comma separated if multiple e.g. pdf, docx, zip, txt</span>
             </div>
 
             <div class="form-group">
                 <label for="additionalInfo">Additional information</label>
                 <textarea id="additionalInfo" th:field="*{additionalInfo}" rows="3"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="status">Status <span class="req" aria-hidden="true">*</span></label>
-                <select id="status" th:field="*{status}" aria-required="true">
-                    <option value="SUBMITTED">Active</option>
-                    <option value="REVIEWED">Reviewed</option>
-                    <option value="DELETED">Deleted</option>
-                </select>
             </div>
 
             <p class="req-note"><span aria-hidden="true">*</span> Required fields</p>

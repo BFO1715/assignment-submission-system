@@ -40,6 +40,11 @@ public class StudentRepository {
         );
     }
 
+    public List<Student> findAll() {
+        String sql = "SELECT * FROM student ORDER BY lastName ASC";
+        return jdbcTemplate.query(sql, studentRowMapper);
+    }
+
     public Optional<Student> findByEmail(String email) {
         String sql = "SELECT * FROM student WHERE email = ?";
         List<Student> results = jdbcTemplate.query(sql, studentRowMapper, email);
@@ -56,5 +61,10 @@ public class StudentRepository {
         String sql = "SELECT COUNT(*) FROM student WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return count != null && count > 0;
+    }
+
+    public int updatePassword(String studentId, String hashedPassword) {
+        String sql = "UPDATE student SET password = ? WHERE studentId = ?";
+        return jdbcTemplate.update(sql, hashedPassword, studentId);
     }
 }

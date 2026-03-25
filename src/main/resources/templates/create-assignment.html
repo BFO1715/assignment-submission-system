@@ -33,14 +33,18 @@
                 <div class="form-group">
                     <label for="assignmentId">Assignment ID <span class="req" aria-hidden="true">*</span></label>
                     <input type="text" id="assignmentId" th:field="*{assignmentId}"
-                           placeholder="e.g. A002"
+                           placeholder="e.g. A017"
                            aria-required="true"/>
                 </div>
                 <div class="form-group">
-                    <label for="courseId">Course ID <span class="req" aria-hidden="true">*</span></label>
+                    <label for="courseId">Course ID(s) <span class="req" aria-hidden="true">*</span></label>
                     <input type="text" id="courseId" th:field="*{courseId}"
-                           placeholder="e.g. CS4012"
-                           aria-required="true"/>
+                           placeholder="e.g. CS4012, CS5012"
+                           aria-required="true"
+                           aria-describedby="courseId-hint"/>
+                    <span id="courseId-hint" class="form-hint">
+                        Comma separated if multiple
+                    </span>
                 </div>
             </div>
 
@@ -49,6 +53,16 @@
                 <input type="text" id="title" th:field="*{title}"
                        placeholder="e.g. Software Design Report"
                        aria-required="true"/>
+            </div>
+
+            <div class="form-group">
+                <label for="studentId">Student ID</label>
+                <input type="text" id="studentId" th:field="*{studentId}"
+                       placeholder="Leave blank for all students on this course"
+                       aria-describedby="studentId-hint"/>
+                <span id="studentId-hint" class="form-hint">
+                    Optional — only set this for individual student assignments or special circumstances
+                </span>
             </div>
 
             <input type="hidden" name="adminId" th:value="${adminId}"/>
@@ -73,7 +87,7 @@
                        placeholder="e.g. pdf, docx, zip"
                        aria-required="true"
                        aria-describedby="fileTypes-hint"/>
-                <span id="fileTypes-hint" class="form-hint">Comma separated e.g. pdf, docx, zip</span>
+                <span id="fileTypes-hint" class="form-hint">Comma separated e.g. pdf, docx, zip, txt</span>
             </div>
 
             <div class="form-group">
